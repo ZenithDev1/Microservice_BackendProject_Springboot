@@ -28,6 +28,7 @@ public class JobController {
         return "Job created";
     }
 
+    //finding job by id
     @GetMapping("/jobs/{id}")
     public Job findJobById(@PathVariable Long id){
         Job job = jobService.findJobById(id);
