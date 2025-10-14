@@ -2,6 +2,8 @@ package com.Zenithdev.firstMicroserviceProject.job;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.batch.BatchProperties;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -10,29 +12,33 @@ import java.util.List;
 @RestController
 public class JobController {
 
-    @Autowired
-    private JobService jobService;
+    //@Autowired
+    private final JobService jobService;
 
-//    public JobController(JobService jobService) {
-//        this.jobService = jobService;
-//    }
+    public JobController(JobService jobService) {
+        this.jobService = jobService;
+    }
 
     @GetMapping("/jobs")
-    public List<Job> findAll(){
-        return jobService.findAll();
+    public ResponseEntity<List<Job>> findAll(){
+        return ResponseEntity.ok(jobService.findAll());
     }
 
     @PostMapping("/jobs")
-    public String createJob(@RequestBody Job job){
+    public ResponseEntity <String> createJob(@RequestBody Job job){
         jobService.createJob(job);
-        return "Job created";
+        return new ResponseEntity<>("Job created",HttpStatus.CREATED);
     }
 
     //finding job by id
     @GetMapping("/jobs/{id}")
-    public Job findJobById(@PathVariable Long id){
+    public ResponseEntity<Job> findJobById(@PathVariable Long id){
+
         Job job = jobService.findJobById(id);
-        return job;
+        if(job != null) {
+            return new ResponseEntity<>(job, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
 }
