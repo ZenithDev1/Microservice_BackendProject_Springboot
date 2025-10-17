@@ -11,5 +11,5 @@ public interface JobService {
     void createJob(Job job);
     Job findJobById(Long id);
     boolean deleteJobById(Long id);
-    boolean updateJobDetailsById(Long id);
+    boolean updateJobDetailsById(Long id, Job updatedJob);
 }
